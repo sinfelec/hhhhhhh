@@ -1,5 +1,8 @@
 package testttt;
 
+
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,6 +55,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.TabStop;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
 import javax.swing.text.html.StyleSheet;
@@ -69,6 +73,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.JProgressBar;
 import javax.swing.JLayeredPane;
+import javax.swing.ListSelectionModel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class test extends JFrame{
@@ -131,7 +139,7 @@ public class test extends JFrame{
       private String zipName;
       private JList list;
       private DefaultListModel listmodel;
-     
+     private String indices=null;
      // private String labels[]=null;
 	public test() {
 		// TODO Auto-generated constructor stub
@@ -192,7 +200,7 @@ public class test extends JFrame{
 		 this.TVA.setEditable(false);
 		 this.labelht = new JLabel("Montant hors taxe");
 		 this.labelht.setFont(font.deriveFont(attributes));
-		 this.labelht = new JLabel("Montant TTC :");
+		 this.labelht = new JLabel("Montant HT :");
 		 this.labelht.setFont(font.deriveFont(attributes));
 		 labelht.setBackground(new Color(220, 220, 220));
 		 this.labelht.setForeground(new Color(0, 51, 153));
@@ -278,6 +286,15 @@ public class test extends JFrame{
 		gauche.setBorder(BorderFactory.createLineBorder(Color.gray));
 		listmodel= new DefaultListModel() ;
 		list = new JList(listmodel);
+		list.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				indices = ((ImgText)list.getSelectedValue()).getName();
+				System.out.println(indices);
+			}
+		});
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setBorder(BorderFactory.createLineBorder(Color.gray));
 		list.setBounds(0, 0, 241, 335);
 		gauche.add(list);
@@ -411,14 +428,14 @@ public class test extends JFrame{
 		
 		JLabel lblIdentifientFiscal = new JLabel("Identifiant fiscal  :");
 		lblIdentifientFiscal.setFont(new Font("Tahoma", 1, 11));
-		lblIdentifientFiscal.setForeground(new Color(0, 153, 51));
+		lblIdentifientFiscal.setForeground(new Color(0, 51, 153));
 		lblIdentifientFiscal.setFont(font.deriveFont(attributes));
 		lblIdentifientFiscal.setBounds(10, 11, 110, 17);
 		panel.add(lblIdentifientFiscal);
 		
 		JLabel lblNewLabel = new JLabel("Période / année :");
 		lblNewLabel.setFont(new Font("Tahoma", 1, 11));
-	    lblNewLabel.setForeground(new Color(0, 153, 51));
+	    lblNewLabel.setForeground(new Color(0, 51, 153));
 	    lblNewLabel.setFont(font.deriveFont(attributes));
 		lblNewLabel.setBounds(10, 36, 110, 30);
 		panel.add(lblNewLabel);
@@ -480,7 +497,7 @@ public class test extends JFrame{
 				
 				  //listmodel.addElement(leFichie[i].getAbsolutePath().substring(leFichie[i].getAbsolutePath().lastIndexOf('\\') +1,leFichie[i].getAbsolutePath().length()) );
 				  
-				 dlm1.addElement(new ImgText(leFichie[i].getAbsolutePath().substring(leFichie[i].getAbsolutePath().lastIndexOf('\\') +1,leFichie[i].getAbsolutePath().length())));
+				 dlm1.addElement(new ImgText(leFichie[i].getAbsolutePath()));
 				  //System.out.println(leFichie[i].getAbsolutePath());
 				list.setCellRenderer(new randerer());
 				list.setModel(dlm1);
@@ -509,12 +526,26 @@ public class test extends JFrame{
 	  }
 	 
 	 private boolean translateXML(String dir) throws Exception{
-		 
+		 // jdialogue pour bar progress......
+    	 final JDialog dlg = new JDialog();
+ 	    JProgressBar dpb = new JProgressBar(0, 500);
+ 	    dlg.getContentPane().add(BorderLayout.CENTER, dpb);
+ 	    dlg.getContentPane().add(BorderLayout.NORTH, new JLabel("Progress..."));
+ 	    dlg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+ 	    dlg.setSize(300, 75);
+ 	    
+ 	   Thread t = new Thread(new Runnable() {
+ 	      public void run() {
+ 	        dlg.setVisible(true);
+ 	      }
+ 	    });
 
-	      System.out.println("translat     cdcddfdfdffcd");
+	     // System.out.println("translat     cdcddfdfdffcd");
 		    if (dir != null)
 		    	
-		    {System.out.println("translat     cdcddfdfdffcd");
+		    {
+		    	System.out.println(dir);
+		    	
 		    	
 		      /*if (this.jTextField2.getText().isEmpty())
 		      {
@@ -582,6 +613,7 @@ public class test extends JFrame{
 		    	 TTC.setText(df.format(TTC1));
 		    	 double TVA1=(double)sheet.getRow(row-3).getCell(9).getNumericCellValue();
 		    	 TVA.setText(Double.toString(TVA1));
+		    	
 		    	 
 		        for (int i = 15; i < row-3; i++) {
 		        	/*Boolean  isLastRow = true;
@@ -594,8 +626,11 @@ public class test extends JFrame{
 		        		
 		        	}
 		        	*/
-		        	
-		        			
+		        	/*t.start();
+		        	for (int j = 15; j < 300000000; j++){
+		        	 dpb.setValue(j);
+		   	      dpb.setVisible(true);
+		   	      System.out.println("dfdfdfdfd");}*/
 		        	
 			        	String line = new String("<rd>\n");  
 		        		String Content1 = sheet.getRow(i).getCell(0).toString();
@@ -684,6 +719,8 @@ public class test extends JFrame{
 		      this.msge += "<span class='failure'>Emplacement fichier excel erroné.</span><br/><br/>";
 		      return false;
 		    }
+		    dlg.setVisible(false);
+	        dlg.dispose();
 		    return true;
 		  }
 	 
@@ -691,15 +728,17 @@ public class test extends JFrame{
 	 private void convertir ()
 	  {
 		// textPane.
-	    int[] indices = this.list.getSelectedIndices();
-	    for (int k = 0; k < indices.length; k++)
+		 
+	   //int[] indices = this.list.getSelectedIndices();
+	   // for (int k = 0; k < indices.length; k++)
 	    {
 	      this.msge = "";
 	      try
 	      {
-	        if (translateXML((String)dlm1.get(indices[k])))
+	        //if (translateXML(((ImgText)list.getSelectedValue()).getName()))
+	        if (indices!=null)
 	        {
-	        	
+	        	translateXML(indices);
 	          //this.list.setBackground(new Color(153, 204, 255));
 	          String outputdir = "success";
 	        /*  if (!outputdir.endsWith("\\")) {
@@ -725,6 +764,7 @@ public class test extends JFrame{
 	      }
 	      this.message += this.msge;
 	    }
+	    
 	    textPane.setText(message);
 	    message=null;
 	  }
@@ -794,7 +834,7 @@ public class test extends JFrame{
 				String ligne;
 				while ((ligne=br.readLine())!=null){
 					//System.out.println(ligne);
-					chaine+=ligne+"\n";
+					chaine+=ligne+"\n"+"\n";
 				}
 				br.close(); 
 			}		
@@ -809,26 +849,33 @@ public class test extends JFrame{
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 					chaine=dialog.chaine;
+					dialog.setAlwaysOnTop(true);
 					System.out.println(chaine);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				}
-			SimpleAttributeSet center = new SimpleAttributeSet();
+			//SimpleAttributeSet center = new SimpleAttributeSet();
+			//StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 			Style defaut = textPane.getStyle("default");
 			Style style1 = textPane.addStyle("style1", defaut);
 			      StyleConstants.setFontFamily(style1, "Tahoma");
-			      StyleConstants.setFontSize(style1, 16);
+			      StyleConstants.setFontSize(style1, 14);
+			      StyleConstants.setSpaceAbove(style1, 20);
 			      StyleConstants.setAlignment(style1, StyleConstants.ALIGN_CENTER);
 			Style style2 = textPane.addStyle("style2", style1);
 			      StyleConstants.setFontFamily(style1, "Tahoma");
 			      StyleConstants.setForeground(style2, Color.BLUE);
 			      StyleConstants.setFontSize(style2, 18);
-
-			String s1 = "Coordonnées Société____________________________________________ ";
+			String s1 = "\n  Coordonnées Société____________________________________________ ";
 			String s2 = chaine;
-			String s3 = "Aide Support__________________________________________________";
-			String s4 = "";
+			String s3 = "  Aide Support__________________________________________________\n";
+			String s4 = "  \n pour toute qustion ou aide supplémentaire ,consultez :"+"\n"
+			             +"  - Manuel d'utilisation "+"\n"+"  \n-support Sinfelec par téléphone au : 05 22 66 67 04"+"\n"
+					+"  ou pa email à l'adresse suivante : support@sinfelec.ma"+"\n"
+			             +"  \n Sinfelec Taxe sur la Valeur Ajoutée © Tous droit réservés - 2015- condition d'utilisation"+"\n"
+			             +"  http://www.sinfelec.ma/"+"\n"
+			             +"  adressss";
 			StyledDocument sDoc = (StyledDocument)textPane.getDocument();
 			try {
 			      int pos = 0;
@@ -837,7 +884,9 @@ public class test extends JFrame{
 			      sDoc.insertString(pos, s2, style1);pos+=s2.length();
 			      sDoc.insertString(pos, s3, style2);pos+=s3.length();
 			      sDoc.insertString(pos, s4, style1);
+			     // sDoc.setParagraphAttributes(0, sDoc.getLength(), center, false);
 			} catch (BadLocationException e) { }
+			
 	}
 	
 	
@@ -898,7 +947,7 @@ public class test extends JFrame{
 	      System.out.println("dfdfdfdfd");
 	      if(dpb.getValue() == 500){
 	        dlg.setVisible(false);
-	        System.exit(0);
+	        dispose();
 	        
 	      }
 	      try {

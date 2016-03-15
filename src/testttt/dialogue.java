@@ -87,29 +87,29 @@ public class dialogue extends JDialog {
 			textField_4.setColumns(10);
 		}
 		
-		JLabel lblRaisonSocial = new JLabel("Raison social :");
+		JLabel lblRaisonSocial = new JLabel("Raison social  :");
 		lblRaisonSocial.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblRaisonSocial.setBounds(35, 10, 121, 20);
 		contentPanel.add(lblRaisonSocial);
 		
-		JLabel lblAdresse = new JLabel("Adresse :");
+		JLabel lblAdresse = new JLabel("Adresse         :");
 		lblAdresse.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblAdresse.setBounds(35, 54, 91, 20);
 		contentPanel.add(lblAdresse);
 		
-		JLabel lblEm = new JLabel("Email :");
+		JLabel lblEm = new JLabel("Email            :");
 		lblEm.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblEm.setBounds(35, 104, 46, 20);
+		lblEm.setBounds(35, 104, 105, 20);
 		contentPanel.add(lblEm);
 		
-		JLabel lblTele = new JLabel("t\u00E9l\u00E9phone :");
+		JLabel lblTele = new JLabel("t\u00E9l\u00E9phone      :");
 		lblTele.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblTele.setBounds(35, 152, 91, 20);
 		contentPanel.add(lblTele);
 		
-		JLabel lblFax = new JLabel("Fax :");
+		JLabel lblFax = new JLabel("Fax               :");
 		lblFax.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblFax.setBounds(35, 201, 46, 20);
+		lblFax.setBounds(35, 201, 105, 20);
 		contentPanel.add(lblFax);
 		{
 			JPanel buttonPane = new JPanel();
@@ -147,19 +147,18 @@ public class dialogue extends JDialog {
 	
 	public void modifier(){
 		
-		 this.chaine="Coordonnées Société_______________________________________________________  "+"\n";
+		 this.chaine="\n";
 		String fichier ="c:/conf1.txt";
 		String nom=textField.getText();
 		chaine=chaine+ " Raison social : " + nom+"\n";
-		String adress=textField_4.getText();
-		chaine=chaine+" Adresse : "+ adress+"\n";
-		String mail=textField_1.getText();
-		chaine=chaine+" E-mail : "+mail+"\n";
-		String telephone=textField_2.getText();
-		chaine=chaine+ " Téléphone : " + telephone+"\n";
-		String fax=textField_3.getText()+"\n";
-		chaine=chaine+ " Fax : " + fax;
-		chaine+=" Aide Support";
+		String adress=textField_2.getText();
+		chaine=chaine+ " Adresse        : "+ adress+"\n";
+		String mail=textField_3.getText();
+		chaine=chaine+ " E-mail          : "+mail+"\n";
+		String telephone=textField_4.getText();
+		chaine=chaine+ " Téléphone    : " + telephone+"\n";
+		String fax=textField_1.getText()+"\n";
+		chaine=chaine+ " Fax            : " + fax;
 		File monFichier = new File(fichier); 
 		
 		try {
