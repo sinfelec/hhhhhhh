@@ -46,7 +46,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
 import javax.swing.text.html.StyleSheet;
@@ -780,6 +785,7 @@ public class test extends JFrame{
 			String chaine="";
 			String fichier ="c:/conf1.txt";
 			File monFichier = new File(fichier); 
+			
 			if(monFichier.exists()) {	
 			try{
 				InputStream ips=new FileInputStream(fichier); 
@@ -787,7 +793,7 @@ public class test extends JFrame{
 				BufferedReader br=new BufferedReader(ipsr);
 				String ligne;
 				while ((ligne=br.readLine())!=null){
-					System.out.println(ligne);
+					//System.out.println(ligne);
 					chaine+=ligne+"\n";
 				}
 				br.close(); 
@@ -808,9 +814,32 @@ public class test extends JFrame{
 					e.printStackTrace();
 				}
 				}
-			textPane.setText(chaine);
-		
+			SimpleAttributeSet center = new SimpleAttributeSet();
+			Style defaut = textPane.getStyle("default");
+			Style style1 = textPane.addStyle("style1", defaut);
+			      StyleConstants.setFontFamily(style1, "Tahoma");
+			      StyleConstants.setFontSize(style1, 16);
+			      StyleConstants.setAlignment(style1, StyleConstants.ALIGN_CENTER);
+			Style style2 = textPane.addStyle("style2", style1);
+			      StyleConstants.setFontFamily(style1, "Tahoma");
+			      StyleConstants.setForeground(style2, Color.BLUE);
+			      StyleConstants.setFontSize(style2, 18);
+
+			String s1 = "Coordonnées Société____________________________________________ ";
+			String s2 = chaine;
+			String s3 = "Aide Support__________________________________________________";
+			String s4 = "";
+			StyledDocument sDoc = (StyledDocument)textPane.getDocument();
+			try {
+			      int pos = 0;
+			      
+			      sDoc.insertString(pos, s1, style2);pos+=s1.length();
+			      sDoc.insertString(pos, s2, style1);pos+=s2.length();
+			      sDoc.insertString(pos, s3, style2);pos+=s3.length();
+			      sDoc.insertString(pos, s4, style1);
+			} catch (BadLocationException e) { }
 	}
+	
 	
 	private void modifier(){
 		String chaine="";
@@ -875,6 +904,7 @@ public class test extends JFrame{
 	      try {
 	    	  
 	        Thread.sleep(25);
+	        System.out.print("dfff");
 	      } catch (InterruptedException e) {
 	        e.printStackTrace();
 	      }
